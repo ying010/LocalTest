@@ -1,10 +1,10 @@
-package com.example.demo.task;
+package com.example.demo.download.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @Package com.example.demo.task
+ * @Package com.example.demo.download.task
  * @ClassName BaseTak
  * @Description TODO
  * @Author W.Z.King

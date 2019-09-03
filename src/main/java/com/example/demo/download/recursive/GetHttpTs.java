@@ -1,8 +1,7 @@
-package com.example.demo.recursive;
+package com.example.demo.download.recursive;
 
-import com.example.demo.config.BizConstant;
-import com.example.demo.data.Video;
-import com.example.demo.file.util.RecordLog;
+import com.example.demo.download.config.BizConstant;
+import com.example.demo.download.data.Video;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,6 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,16 +24,12 @@ public class GetHttpTs {
 
     private static String CONTENT = "https://21maokk.com/";
 
-    private static String DOWN_LOGS = "F:\\ts\\log";
-
     private static String DOWN_URL = "F:\\ts\\data\\";
     static {
         DOWN_URL = DOWN_URL + new SimpleDateFormat("yyyyMMdd").format(new Date());
     }
 
     public static void main(String[] args) {
-        GetHttpTs getHttpTs = new GetHttpTs();
-
         try {
             logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<start>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             logger.info(">>>getHome url: " + "https://21maokk.com/vodtypehtml/13-34.html");
@@ -53,7 +47,7 @@ public class GetHttpTs {
                         getM3u8Url(video);
                         getTsUrl(video);
                         getTs(video);
-                        downByTask(getHttpTs, video);
+                        downByTask(video);
                         mergeVideo(video);
                         logger.info(">>>>>>>>>>>>>>>>>download video success video file name: " + video.getFileName() + "video name: " + video.getName() + "<<<<<<<<<<<");
                     } catch (Exception e) {
@@ -73,7 +67,6 @@ public class GetHttpTs {
     }
 
     private static List<Video> getHome(String startUrl) throws Exception {
-//        System.out.println("getHome start startUrl: " + startUrl);
         int tryTime = 0;
         for (; tryTime < 10; ) {
             try {
@@ -243,7 +236,7 @@ public class GetHttpTs {
         throw new Exception("getTs failed");
     }
 
-    private static void downByTask(GetHttpTs getHttpTs, Video video) {
+    private static void downByTask(Video video) {
         if (logger.isDebugEnabled()) {
             logger.debug("downByTask start video fileName: " + video.getFileName());
         }
@@ -272,8 +265,6 @@ public class GetHttpTs {
                         downVideo(tsUrl, finalFile, taskName, "ts");
                         logger.info("down " + video.getFileName() + " ts success task: " + taskNum + "/" + video.getTs().size());
                     } catch (Exception e) {
-                        RecordLog recordLog = new RecordLog(DOWN_LOGS + "\\err.log", true);
-                        recordLog.write(">>>>TS<<<<< " + tsUrl + "\r\n");
                         logger.error("down " + video.getFileName() + " ts error task: " + taskNum, e);
                     }
                 });
