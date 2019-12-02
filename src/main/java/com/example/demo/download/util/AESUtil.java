@@ -6,6 +6,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -78,5 +79,34 @@ public class AESUtil {
         SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
         return key;
     }
+
+
+    private static byte[] hexStr2Byte(String hex) {
+        ByteBuffer bf = ByteBuffer.allocate(hex.length() / 2);
+        for (int i = 0; i < hex.length(); i++) {
+            String hexStr = hex.charAt(i) + "";
+            i++;
+            hexStr += hex.charAt(i);
+            byte b = (byte) Integer.parseInt(hexStr, 16);
+            bf.put(b);
+        }
+        return bf.array();
+    }
+
+
+    public static byte[] parseHexStr2bytes(String hexStr) {
+        if (hexStr.length() < 1) {
+            return null;
+        }
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < result.length; i++) {
+            int high = Integer.parseInt(hexStr.substring(2 * i, 2 * i + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(2 * i + 1, 2 * i + 2), 16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
+    }
+
+
 
 }

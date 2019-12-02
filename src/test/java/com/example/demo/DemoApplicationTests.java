@@ -1,8 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.download.util.AESUtil;
-import com.example.demo.util.FileUtil;
-import org.apache.commons.lang.StringUtils;
+import com.example.demo.download.util.FileUtil;
 import org.junit.Test;
 
 import java.io.File;
@@ -18,6 +17,15 @@ import java.io.UnsupportedEncodingException;
 public class DemoApplicationTests {
 
     @Test
+    public void contextLoads() throws Exception {
+        File file = new File("D:\\ts\\response.ts");
+        byte[] fileByte = FileUtil.read(file);
+
+        byte[] targetFile = AESUtil.decrypt(fileByte, "050eaff5ac9b8cf8");
+        FileUtil.write("D:\\ts\\new.ts", targetFile);
+    }
+
+    @Test
     public void aesTest() throws UnsupportedEncodingException {
         String content = "密密码1993";
         String password = "050eaff5ac9b8cf8";
@@ -30,7 +38,7 @@ public class DemoApplicationTests {
     }
 
     @Test
-    public void tsTest() throws IOException {
+    public void tsTest() throws Exception {
         byte[] fileByte = FileUtil.read(new File("F:/ts/response.ts"));
         String password = "050eaff5ac9b8cf8";
         byte[] decrypt = AESUtil.decrypt(fileByte, password);
@@ -46,7 +54,7 @@ public class DemoApplicationTests {
     }
 
     @Test
-    public void fileTest() throws IOException {
+    public void fileTest() throws Exception {
         byte[] fileByte = FileUtil.read(new File("F:/ts/response.ts"));
         FileUtil.write(fileByte, "F:/ts/new.ts");
         FileUtil.deleteFile(new File("F:/ts/response.ts"));
