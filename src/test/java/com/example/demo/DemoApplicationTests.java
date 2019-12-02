@@ -48,9 +48,8 @@ public class DemoApplicationTests {
     @Test
     public void fileTest() throws IOException {
         byte[] fileByte = FileUtil.read(new File("F:/ts/response.ts"));
-        for (byte b : fileByte) {
-            System.out.println(b);
-        }
+        FileUtil.write(fileByte, "F:/ts/new.ts");
+        FileUtil.deleteFile(new File("F:/ts/response.ts"));
     }
 
     public static String bytesToHexString(byte[] src) {

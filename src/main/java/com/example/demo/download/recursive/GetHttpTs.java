@@ -14,24 +14,34 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GetHttpTs {
-    private static Logger logger = LoggerFactory.getLogger(GetHttpTs.class);
+    private static final Logger logger = LoggerFactory.getLogger(GetHttpTs.class);
 
-    private static String CONTENT = "https://21maokk.com/";
+    private static final String ROOT = "https://21maokk.com/";
 
-    private static String DOWN_URL = "F:\\ts\\data\\";
+    private static String CURRENT_MENU = "13";
+
+    private static Integer PAGE = 13;
+
+    private static String DOWN_URL = "F:/ts/data/";
+
+    private static String WEB_URL;
+
+    private static Map<String, String> MENU;
     static {
-        DOWN_URL = DOWN_URL + new SimpleDateFormat("yyyyMMdd").format(new Date());
+        MENU.put("13", "中文");
+        DOWN_URL = DOWN_URL + MENU.get(CURRENT_MENU) + "/" + PAGE;
     }
 
     public static void main(String[] args) {
         try {
-            logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<start>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<application start>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             logger.info(">>>getHome url: " + "https://21maokk.com/vodtypehtml/13-34.html");
             List<Video> homeLst = getHome("https://21maokk.com/vodtypehtml/13-34.html");
 
@@ -116,11 +126,11 @@ public class GetHttpTs {
     }
 
     private static void getM3u8Url(Video video) throws Exception {
-        logger.info("getM3u8Url start connection url is: " + CONTENT + video.getEntrance());
+        logger.info("getM3u8Url start connection url is: " + ROOT + video.getEntrance());
         int tryTime = 0;
         while (tryTime < 10) {
             try {
-                URL url = new URL(CONTENT + video.getEntrance());
+                URL url = new URL(ROOT + video.getEntrance());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                 connection.setDoOutput(true); // 设置该连接是可以输出的
@@ -149,14 +159,14 @@ public class GetHttpTs {
                 connection.disconnect();
                 return;
             } catch (ConnectException e) {
-                logger.warn("getM3u8Url timeOut try again " + tryTime + "times url: " + CONTENT + video.getEntrance());
+                logger.warn("getM3u8Url timeOut try again " + tryTime + "times url: " + ROOT + video.getEntrance());
             } catch (Exception e) {
-                logger.error("getM3u8Url err try again " + tryTime + "times url: " + CONTENT + video.getEntrance(), e);
+                logger.error("getM3u8Url err try again " + tryTime + "times url: " + ROOT + video.getEntrance(), e);
             } finally {
                 tryTime++;
             }
         }
-        logger.error("getM3u8Url failed url: " + CONTENT + video.getEntrance());
+        logger.error("getM3u8Url failed url: " + ROOT + video.getEntrance());
         throw new Exception("getM3u8Url failed");
     }
 

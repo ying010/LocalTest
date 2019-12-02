@@ -20,4 +20,8 @@ public class FileUtil {
         outputStream.write(content);
         outputStream.close();
     }
+
+    public static void deleteFile(File file) {
+        file.deleteOnExit();
+    }
 }
